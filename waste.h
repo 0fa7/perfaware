@@ -15,7 +15,7 @@ std::vector<uint32_t> init_array(uint32_t count)
     return result;
 }
 
-uint32_t inline single_scalar(uint32_t count, uint32_t *input)
+uint32_t single_scalar(uint32_t count, uint32_t *input)
 {
     uint32_t sum = 0;
     for(int32_t ix = 0; ix < count; ++ix)

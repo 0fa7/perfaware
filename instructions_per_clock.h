@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <vector>
 
-uint32_t inline unroll_2_scalar(uint32_t count, uint32_t *input)
+uint32_t unroll_2_scalar(uint32_t count, uint32_t *input)
 {
     uint32_t sum = 0;
     for(int32_t ix = 0; ix < count; ix += 2)
@@ -15,7 +15,7 @@ uint32_t inline unroll_2_scalar(uint32_t count, uint32_t *input)
     return sum;
 }
 
-uint32_t inline unroll_4_scalar(uint32_t count, uint32_t *input)
+uint32_t unroll_4_scalar(uint32_t count, uint32_t *input)
 {
     uint32_t sum = 0;
     for(int32_t ix = 0; ix < count; ix += 4)
@@ -29,7 +29,7 @@ uint32_t inline unroll_4_scalar(uint32_t count, uint32_t *input)
     return sum;
 }
 
-uint32_t inline unroll_8_scalar(uint32_t count, uint32_t *input)
+uint32_t unroll_8_scalar(uint32_t count, uint32_t *input)
 {
     uint32_t sum = 0;
     for(int32_t ix = 0; ix < count; ix += 8)
@@ -47,7 +47,7 @@ uint32_t inline unroll_8_scalar(uint32_t count, uint32_t *input)
     return sum;
 }
 
-uint32_t inline dual_scalar(uint32_t count, uint32_t *input)
+uint32_t dual_scalar(uint32_t count, uint32_t *input)
 {
     uint32_t sum_a = 0;
     uint32_t sum_b = 0;
@@ -61,7 +61,7 @@ uint32_t inline dual_scalar(uint32_t count, uint32_t *input)
     return sum_a + sum_b;
 }
 
-uint32_t inline quad_scalar(uint32_t count, uint32_t *input)
+uint32_t quad_scalar(uint32_t count, uint32_t *input)
 {
     uint32_t sum_a = 0;
     uint32_t sum_b = 0;
@@ -80,7 +80,7 @@ uint32_t inline quad_scalar(uint32_t count, uint32_t *input)
 }
 
 // why is ptr version faster?  blog says it will be addressed in later chapters
-uint32_t inline quad_scalar_ptr(uint32_t count, uint32_t *input)
+uint32_t quad_scalar_ptr(uint32_t count, uint32_t *input)
 {
     uint32_t sum_a = 0;
     uint32_t sum_b = 0;
@@ -101,7 +101,7 @@ uint32_t inline quad_scalar_ptr(uint32_t count, uint32_t *input)
     return sum_a + sum_b + sum_c + sum_d;
 }
 
-uint32_t inline octo_scalar(uint32_t count, uint32_t *input)
+uint32_t octo_scalar(uint32_t count, uint32_t *input)
 {
     uint32_t sum_a = 0;
     uint32_t sum_b = 0;
@@ -127,7 +127,7 @@ uint32_t inline octo_scalar(uint32_t count, uint32_t *input)
     return sum_a + sum_b + sum_c + sum_d + sum_e + sum_f + sum_g;
 }
 
-uint32_t inline octo_scalar_ptr(uint32_t count, uint32_t *input)
+uint32_t octo_scalar_ptr(uint32_t count, uint32_t *input)
 {
     uint32_t sum_a = 0;
     uint32_t sum_b = 0;

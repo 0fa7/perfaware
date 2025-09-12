@@ -44,3 +44,80 @@ uint32_t __attribute__((target("avx2"))) single_avx(uint32_t count, uint32_t *in
     return _mm256_cvtsi256_si32(sum);
 }
 
+uint32_t __attribute__((target("avx2"))) dual_avx(uint32_t count, uint32_t *input)
+{
+    __m256i sum_a = _mm256_setzero_si256();
+    __m256i sum_b = _mm256_setzero_si256();
+
+    for(int ix = 0; ix < count; ix += 16)
+    {
+        sum_a = _mm256_add_epi32(sum_a, _mm256_loadu_si256((__m256i *)&input[ix]));
+        sum_b = _mm256_add_epi32(sum_b, _mm256_loadu_si256((__m256i *)&input[ix + 8]));
+    }
+
+    __m256i sum = _mm256_add_epi32(sum_a, sum_b);
+
+    sum = _mm256_hadd_epi32(sum, sum);
+    sum = _mm256_hadd_epi32(sum, sum);
+    __m256i sum_s = _mm256_permute2x128_si256(sum, sum, 1 | (1 << 4));
+    sum = _mm256_add_epi32(sum, sum_s);
+
+    return _mm256_cvtsi256_si32(sum);
+}
+
+uint32_t __attribute__((target("avx2"))) quad_avx(uint32_t count, uint32_t *input)
+{
+    __m256i sum_a = _mm256_setzero_si256();
+    __m256i sum_b = _mm256_setzero_si256();
+    __m256i sum_c = _mm256_setzero_si256();
+    __m256i sum_d = _mm256_setzero_si256();
+
+    for(int ix = 0; ix < count; ix += 32)
+    {
+        sum_a = _mm256_add_epi32(sum_a, _mm256_loadu_si256((__m256i *)&input[ix]));
+        sum_b = _mm256_add_epi32(sum_b, _mm256_loadu_si256((__m256i *)&input[ix + 8]));
+        sum_c = _mm256_add_epi32(sum_c, _mm256_loadu_si256((__m256i *)&input[ix + 16]));
+        sum_d = _mm256_add_epi32(sum_d, _mm256_loadu_si256((__m256i *)&input[ix + 24]));
+    }
+
+    __m256i sum_a_b = _mm256_add_epi32(sum_a, sum_b);
+    __m256i sum_c_d = _mm256_add_epi32(sum_c, sum_d);
+    __m256i sum = _mm256_add_epi32(sum_a_b, sum_c_d);
+
+    sum = _mm256_hadd_epi32(sum, sum);
+    sum = _mm256_hadd_epi32(sum, sum);
+    __m256i sum_s = _mm256_permute2x128_si256(sum, sum, 1 | (1 << 4));
+    sum = _mm256_add_epi32(sum, sum_s);
+
+    return _mm256_cvtsi256_si32(sum);
+}
+
+uint32_t __attribute__((target("avx2"))) quad_avx_ptr(uint32_t count, uint32_t *input)
+{
+    __m256i sum_a = _mm256_setzero_si256();
+    __m256i sum_b = _mm256_setzero_si256();
+    __m256i sum_c = _mm256_setzero_si256();
+    __m256i sum_d = _mm256_setzero_si256();
+
+    count /=32;
+
+    while(count--)
+    {
+        sum_a = _mm256_add_epi32(sum_a, _mm256_loadu_si256((__m256i *)&input[0]));
+        sum_b = _mm256_add_epi32(sum_b, _mm256_loadu_si256((__m256i *)&input[8]));
+        sum_c = _mm256_add_epi32(sum_c, _mm256_loadu_si256((__m256i *)&input[16]));
+        sum_d = _mm256_add_epi32(sum_d, _mm256_loadu_si256((__m256i *)&input[24]));
+        input += 32;
+    }
+
+    __m256i sum_a_b = _mm256_add_epi32(sum_a, sum_b);
+    __m256i sum_c_d = _mm256_add_epi32(sum_c, sum_d);
+    __m256i sum = _mm256_add_epi32(sum_a_b, sum_c_d);
+
+    sum = _mm256_hadd_epi32(sum, sum);
+    sum = _mm256_hadd_epi32(sum, sum);
+    __m256i sum_s = _mm256_permute2x128_si256(sum, sum, 1 | (1 << 4));
+    sum = _mm256_add_epi32(sum, sum_s);
+
+    return _mm256_cvtsi256_si32(sum);
+}
